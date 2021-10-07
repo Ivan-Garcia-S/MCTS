@@ -3,7 +3,7 @@ from mcts_node import MCTSNode
 from random import choice
 from math import sqrt, log
 
-num_nodes = 1000
+num_nodes = 500
 explore_faction = 2.
 
 def traverse_nodes(node, board, state, identity):
@@ -22,13 +22,14 @@ def traverse_nodes(node, board, state, identity):
 
     # keep finding until leaf_node is never visited or it doesn't have children
     while leaf_node.child_nodes and leaf_node.visits != 0:
-
+        print("Still more")
+        
         best_score = 0
         for i in leaf_node.child_nodes.values():
             # UCT calculate the score
             current_score = (i.wins / i.visits) + (explore_faction * sqrt(log(leaf_node.visits) / i.visits))
-            print(str(i))
-            print(current_score)
+            #print(str(i))
+            #print(current_score)
 
             if current_score > best_score:
                 best_score = current_score
@@ -69,6 +70,8 @@ def rollout(board, state):
     while not board.is_ended(curr_state):
         random_action = choice(board.legal_actions(curr_state))
         curr_state = board.next_state(curr_state, random_action)
+    
+    return board.points_values(curr_state)
 
 
 def backpropagate(node, won):
@@ -86,7 +89,7 @@ def backpropagate(node, won):
         node.wins += 1
     # If not root, step closer to root       
     if node.parent is not None:
-        backpropagate(node.parent, not won)
+        backpropagate(node.parent, won)
         
 
 
@@ -113,14 +116,16 @@ def think(board, state):
         # Very Cool MCTS
         leaf = traverse_nodes(node, board, sampled_game, identity_of_bot)
         new_node = expand_leaf(leaf, board, sampled_game)
-        rollout(board, sampled_game)
-
-        result = True if board.points_values(sampled_game)[identity_of_bot] > 0 else False
+        
+        result = True if rollout(board, sampled_game)[identity_of_bot] > 0 else False
+        
         backpropagate(new_node, result)
 
+        print("---- Current Step {} Finished ----".format(step))
 
-    # check what's the best action
-    best_action = root_node.child_nodes[root_node.child_nodes.keys()[0]]
+
+    # check for the best action
+    best_action = list(root_node.child_nodes.keys())[0]
     for action in root_node.child_nodes:
         if root_node.child_nodes[action].wins > root_node.child_nodes[best_action].wins:
             best_action = action
