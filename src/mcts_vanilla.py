@@ -22,16 +22,15 @@ def traverse_nodes(node, board, state, identity):
 
     # keep finding until leaf_node is never visited or it doesn't have children
     while leaf_node.child_nodes and leaf_node.visits != 0:
-        print("Still more")
-        
         best_score = 0
+
         for i in leaf_node.child_nodes.values():
             # UCT calculate the score
             current_score = (i.wins / i.visits) + (explore_faction * sqrt(log(leaf_node.visits) / i.visits))
             #print(str(i))
             #print(current_score)
 
-            if current_score > best_score:
+            if current_score >= best_score:
                 best_score = current_score
                 leaf_node = i
         
@@ -125,6 +124,7 @@ def think(board, state):
 
 
     # check for the best action
+    # [BUGGED] can't select the most frequently used action
     best_action = list(root_node.child_nodes.keys())[0]
     for action in root_node.child_nodes:
         if root_node.child_nodes[action].wins > root_node.child_nodes[best_action].wins:
