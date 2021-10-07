@@ -18,10 +18,23 @@ def traverse_nodes(node, board, state, identity):
     Returns:        A node from which the next stage of the search can proceed.
 
     """
+    next_node = node
 
+    # keep finding until next_node is never visited or it doesn't have children
+    while next_node.child_nodes != {} and next_node.visits != 0:
 
-    pass
-    # Hint: return leaf_node
+        best_score = 0
+        for i in next_node.child_nodes:
+            # UCT calculate the score
+            current_score = (i.wins / i.visits) + (explore_faction * math.sqrt(math.log(next_node.visits) / i.visits))
+            print(str(i))
+            print(current_score)
+
+            if current_score > best_score:
+                best_score = current_score
+                next_node = i
+        
+    return next_node
 
 
 def expand_leaf(node, board, state):
@@ -94,7 +107,8 @@ def think(board, state):
         node = root_node
 
         # Do MCTS - This is all you!
-
+        leaf = traverse_nodes(node, board, state, identity_of_bot)
+        
     # Return an action, typically the most frequently used action (from the root) or the action with the best
     # estimated win rate.
     return None
