@@ -18,23 +18,23 @@ def traverse_nodes(node, board, state, identity):
     Returns:        A node from which the next stage of the search can proceed.
 
     """
-    next_node = node
+    leaf_node = node
 
-    # keep finding until next_node is never visited or it doesn't have children
-    while next_node.child_nodes and next_node.visits != 0:
+    # keep finding until leaf_node is never visited or it doesn't have children
+    while leaf_node.child_nodes and leaf_node.visits != 0:
 
         best_score = 0
-        for i in next_node.child_nodes.values():
+        for i in leaf_node.child_nodes.values():
             # UCT calculate the score
-            current_score = (i.wins / i.visits) + (explore_faction * math.sqrt(math.log(next_node.visits) / i.visits))
+            current_score = (i.wins / i.visits) + (explore_faction * sqrt(log(leaf_node.visits) / i.visits))
             print(str(i))
             print(current_score)
 
             if current_score > best_score:
                 best_score = current_score
-                next_node = i
+                leaf_node = i
         
-    return next_node
+    return leaf_node
 
 
 def expand_leaf(node, board, state):
@@ -69,7 +69,6 @@ def rollout(board, state):
     while not board.is_ended(curr_state):
         random_action = choice(board.legal_actions(curr_state))
         curr_state = board.next_state(curr_state, random_action)
-
 
 
 def backpropagate(node, won):
@@ -111,15 +110,13 @@ def think(board, state):
         # Start at root
         node = root_node
 
-        #################
         # Very Cool MCTS
-        #################
         leaf = traverse_nodes(node, board, sampled_game, identity_of_bot)
         new_node = expand_leaf(leaf, board, sampled_game)
-        backpropagate(board, rollout(board, sampled_game))
+        rollout(board, sampled_game)
 
-        if board.is_ended(sampled_game):
-            break
+        result = True if board.points_values(sampled_game)[identity_of_bot] > 0 else False
+        backpropagate(new_node, result)
 
 
     # check what's the best action
