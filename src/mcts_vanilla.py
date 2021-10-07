@@ -79,6 +79,7 @@ def backpropagate(node, won):
         won:    An indicator of whether the bot won or lost the game.
 
     """
+    print("Node", node)
     # Updates number of visits
     node.visits += 1 
     # Updates number of wins
