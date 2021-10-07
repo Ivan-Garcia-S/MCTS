@@ -21,10 +21,10 @@ def traverse_nodes(node, board, state, identity):
     next_node = node
 
     # keep finding until next_node is never visited or it doesn't have children
-    while next_node.child_nodes != {} and next_node.visits != 0:
+    while next_node.child_nodes and next_node.visits != 0:
 
         best_score = 0
-        for i in next_node.child_nodes:
+        for i in next_node.child_nodes.values():
             # UCT calculate the score
             current_score = (i.wins / i.visits) + (explore_faction * math.sqrt(math.log(next_node.visits) / i.visits))
             print(str(i))
@@ -48,8 +48,13 @@ def expand_leaf(node, board, state):
     Returns:    The added child node.
 
     """
-    pass
-    # Hint: return new_node
+    next_action = node.untried_actions.pop(0)
+    new_node = MCTSNode(parent=node, parent_action=next_action, action_list=board.legal_actions(state))
+    
+    # add it back in the node
+    node.child_nodes[next_action] = new_node
+
+    return new_node
 
 
 def rollout(board, state):
@@ -106,9 +111,20 @@ def think(board, state):
         # Start at root
         node = root_node
 
-        # Do MCTS - This is all you!
-        leaf = traverse_nodes(node, board, state, identity_of_bot)
+        #################
+        # Very Cool MCTS
+        #################
+        leaf = traverse_nodes(node, board, sampled_game, identity_of_bot)
+        new_node = expand_leaf(leaf, board, sampled_game)
+        backpropagate(board, rollout(board, sampled_game))
+
+    # check what's the best action
+    best_action = root_node.child_nodes[root_node.child_nodes.keys()[0]]
+    for action in root_node.child_nodes:
+        if root_node.child_nodes[action].wins > root_node.child_nodes[best_action].wins:
+            best_action = action
+
         
     # Return an action, typically the most frequently used action (from the root) or the action with the best
     # estimated win rate.
-    return None
+    return best_action
