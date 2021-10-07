@@ -106,6 +106,10 @@ def think(board, state):
         new_node = expand_leaf(leaf, board, sampled_game)
         backpropagate(board, rollout(board, sampled_game))
 
+        if board.is_ended(sampled_game):
+            break
+
+
     # check what's the best action
     best_action = root_node.child_nodes[root_node.child_nodes.keys()[0]]
     for action in root_node.child_nodes:
