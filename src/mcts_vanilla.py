@@ -18,6 +18,8 @@ def traverse_nodes(node, board, state, identity):
     Returns:        A node from which the next stage of the search can proceed.
 
     """
+
+
     pass
     # Hint: return leaf_node
 
@@ -45,7 +47,11 @@ def rollout(board, state):
         state:  The state of the game.
 
     """
-    pass
+    curr_state = state
+    while not board.is_ended(curr_state):
+        random_action = choice(board.legal_actions(curr_state))
+        curr_state = board.next_state(curr_state, random_action)
+
 
 
 def backpropagate(node, won):
@@ -56,7 +62,15 @@ def backpropagate(node, won):
         won:    An indicator of whether the bot won or lost the game.
 
     """
-    pass
+    # Updates number of visits
+    node.visits += 1 
+    # Updates number of wins
+    if won:
+        node.wins += 1
+    # If not root, step closer to root       
+    if node.parent is not None:
+        backpropagate(node.parent, not won)
+        
 
 
 def think(board, state):
