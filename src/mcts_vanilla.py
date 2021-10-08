@@ -17,22 +17,36 @@ def traverse_nodes(node, board, state, identity):
     Returns:        A node from which the next stage of the search can proceed.
 
     """
+
+    # helper function for finding the score
+    def calculate_score(i):
+        return (i.wins / i.visits) + (explore_faction * sqrt(log(i.parent.visits) / i.visits))
+    
+
     leaf_node = node
 
-    # keep finding until leaf_node is never visited or it doesn't have children
     while not leaf_node.untried_actions and leaf_node.child_nodes:
-        best_score = 0
+
+        # find the best child move for this node
+        leaf_node = list(leaf_node.child_nodes.values())[0]
+        best_score = calculate_score(leaf_node)
 
         for i in leaf_node.child_nodes.values():
-            # UCT calculate the score
-            current_score = (i.wins / i.visits) + (explore_faction * sqrt(log(leaf_node.visits) / i.visits))
-            #print(str(i))
-            #print(current_score)
+            current_score = calculate_score(i)
+            #print(str(i) + str(current_score))
 
-            if current_score >= best_score:
+            if current_score > best_score:
                 best_score = current_score
                 leaf_node = i
+    
+        state = board.next_state(state, leaf_node.parent_action)
+        #print(">>> Next Layer from {}".format(leaf_node))
         
+
+    if leaf_node.untried_actions:
+        # expand the tree if current node been visited
+        return expand_leaf(leaf_node, board, state)
+
     return leaf_node
 
 
@@ -48,11 +62,11 @@ def expand_leaf(node, board, state):
 
     """
     next_action = node.untried_actions.pop(0)
+    state = board.next_state(state, next_action)
 
     #print("-all actions-")
     #print(node.untried_actions)
-    #print("expand on next action")
-    #print(next_action)
+    #print("< add leaf at {}".format(next_action))
 
     new_node = MCTSNode(parent=node, parent_action=next_action, action_list=board.legal_actions(state))
     
@@ -86,6 +100,7 @@ def backpropagate(node, won):
         won:    An indicator of whether the bot won or lost the game.
 
     """
+
     # Updates number of visits
     node.visits += 1 
     # Updates number of wins
@@ -93,6 +108,7 @@ def backpropagate(node, won):
         node.wins += 1
     # If not root, step closer to root       
     if node.parent is not None:
+        #print(">>>Hey going from {} to {}".format(str(node), str(node.parent)))
         backpropagate(node.parent, won)
         
 
@@ -117,14 +133,13 @@ def think(board, state):
         # Start at root
         node = root_node
 
-        # Very Cool MCTS
+        # MCTS
         leaf = traverse_nodes(node, board, sampled_game, identity_of_bot)
-        new_node = expand_leaf(leaf, board, sampled_game)
         
         result = True if rollout(board, sampled_game)[identity_of_bot] > 0 else False
-        
-        backpropagate(new_node, result)
+        backpropagate(leaf, result)
 
+        #print("Final Leaf {}".format(leaf))
         #print("---- Current Step {} Finished ----".format(step))
 
 
@@ -133,9 +148,19 @@ def think(board, state):
     #print("All avaliable actions:")
     #print(root_node.child_nodes.keys())
 
+    # helper for finding win rate
+    def node_winrate(node):
+        return node.wins/node.visits
+
+    # determine the best action by win rate (win/visits)
     best_action = list(root_node.child_nodes.keys())[0]
+    best_win_rate = node_winrate(root_node.child_nodes[best_action])
+
     for action in root_node.child_nodes:
-        if root_node.child_nodes[action].wins > root_node.child_nodes[best_action].wins:
+        new_win_rate = node_winrate(root_node.child_nodes[action])
+
+        if new_win_rate > best_win_rate:
+            best_win_rate = new_win_rate
             best_action = action
 
         
