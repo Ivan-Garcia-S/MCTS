@@ -1,0 +1,4 @@
+Experiment 1 – Tree Size
+You are going to pit two versions of the vanilla MCTS bot against each other. Player 1 will be fixed at 100 nodes/tree. Test at least four sizes of tree for Player 2 for at least 100 games each (use p2_sim.py). Plot the number of wins for each tree size. Describe your result (on the submission form). Include an image of your plot with your submission. 
+
+Simulation Result

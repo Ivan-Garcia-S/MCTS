@@ -1,0 +1,5 @@
+Experiment 2 – Heuristic Improvement
+Next, have your modified version of MCTS play against the vanilla version with both having equal tree sizes (suggested size: 1000). Submission analysis: Does the modified version win more games? Does this change if you increase or decrease the size of the trees? 
+
+
+Simulation Result
