@@ -26,7 +26,7 @@ def traverse_nodes(node, board, state, identity):
     leaf_node = node
 
     while not leaf_node.untried_actions and leaf_node.child_nodes:
-
+            
         # find the best child move for this node
         leaf_node = list(leaf_node.child_nodes.values())[0]
         best_score = calculate_score(leaf_node)
@@ -41,10 +41,9 @@ def traverse_nodes(node, board, state, identity):
     
         state = board.next_state(state, leaf_node.parent_action)
         #print(">>> Next Layer from {}".format(leaf_node))
-        
 
+    # expand the tree if current node have more untried actions
     if leaf_node.untried_actions:
-        # expand the tree if current node been visited
         return expand_leaf(leaf_node, board, state)
 
     return leaf_node
@@ -136,6 +135,8 @@ def think(board, state):
         # MCTS
         leaf = traverse_nodes(node, board, sampled_game, identity_of_bot)
         
+        # [BUGGED] it's not using the current state
+
         result = True if rollout(board, sampled_game)[identity_of_bot] > 0 else False
         backpropagate(leaf, result)
 
@@ -144,9 +145,8 @@ def think(board, state):
 
 
     # check for the best action
-    # [BUGGED] can't select the most frequently used action
-    #print("All avaliable actions:")
-    #print(root_node.child_nodes.keys())
+    print("All avaliable actions:")
+    print(root_node.child_nodes.keys())
 
     # helper for finding win rate
     def node_winrate(node):
@@ -162,6 +162,8 @@ def think(board, state):
         if new_win_rate > best_win_rate:
             best_win_rate = new_win_rate
             best_action = action
+    
+    print("Choosed action {} with win rate of {}".format(best_action, best_win_rate))
 
         
     # Return an action, typically the most frequently used action (from the root) or the action with the best
