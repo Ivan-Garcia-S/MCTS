@@ -96,11 +96,14 @@ def rollout(board, state):
     Returns:    The end state of the game.
 
     """
+    
+    
     curr_state = state
     while not board.is_ended(curr_state):
         random_action = choice(board.legal_actions(curr_state))
+       # print(board.display(curr_state, random_action))
         curr_state = board.next_state(curr_state, random_action)
-
+    
     return curr_state
 
 
@@ -176,7 +179,7 @@ def think(board, state):
             best_win_rate = new_win_rate
             best_action = action
     
-    print("Choosed action {} with win rate of {}".format(best_action, best_win_rate))
+    #print("Choosed action {} with win rate of {}".format(best_action, best_win_rate))
 
         
     # Return an action, typically the most frequently used action (from the root) or the action with the best
