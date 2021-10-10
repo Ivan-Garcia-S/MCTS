@@ -3,3 +3,20 @@ Next, have your modified version of MCTS play against the vanilla version with b
 
 
 Simulation Result
+
+P1 Modified 20 - P2 Vanilla 20
+Final win counts: {'draw': 2, 1: 62, 2: 36}
+92.64255092  seconds
+
+P1 Modified 100 - P2 Vanilla 100
+Final win counts: {'draw': 0, 1: 51, 2: 49}
+435.148734999  seconds
+
+P1 Modified 500 - P2 Vanilla 500
+Final win counts: {'draw': 0, 1: 53, 2: 47}
+1943.849126393  seconds
+
+P1 Modified 1000 - P2 Vanilla 1000
+Final win counts: {'draw': 0, 1: 53, 2: 47}
+3804.447813685  seconds
+
