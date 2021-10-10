@@ -1,5 +1,37 @@
 Experiment 3 – Time as a Constraint
-Rather than fix the tree size, use time as the limiting factor. Set a time budget of 1 second. Alter your code to continue growing the tree as long as one full second has not passed. Test this constraint on both implementations. Does your modified version have a larger or smaller tree than the vanilla version? Why do you think this is the case? Does this comparison change at various time limits?
 
 
-Simulation Result
+- Simulation Result -
+
+At 1 sec
+Vanilla Tree Size: 991
+Modified Tree Size: 808
+Vanilla Tree Size: 791
+Modified Tree Size: 807
+Vanilla Tree Size: 1003
+Modified Tree Size: 992
+
+At 3 sec
+Vanilla Tree Size: 2814
+Modified Tree Size: 2690
+Vanilla Tree Size: 3089
+Modified Tree Size: 2664
+Vanilla Tree Size: 3337
+Modified Tree Size: 3105
+
+At 0.2 sec
+Vanilla Tree Size: 209
+Modified Tree Size: 191
+Vanilla Tree Size: 191
+Modified Tree Size: 184
+Vanilla Tree Size: 210
+Modified Tree Size: 191
+
+
+- Analysis -
+
+From all the test cases, it seems that the vanilla version has more tree nodes within the time frame. Modified versions tend to have a smaller tree unless it's winning. 
+
+I think it's because we added a lot of procedures in the modified version that increased the runtime, therefore it's slower in creating nodes comparing to the vanilla version.
+
+The result didn't change at various time limits.

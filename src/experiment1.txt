@@ -1,8 +1,7 @@
 Experiment 1 – Tree Size
-You are going to pit two versions of the vanilla MCTS bot against each other. Player 1 will be fixed at 100 nodes/tree. Test at least four sizes of tree for Player 2 for at least 100 games each (use p2_sim.py). Plot the number of wins for each tree size. Describe your result (on the submission form). Include an image of your plot with your submission. 
 
 
-Simulation Result
+- Simulation Result -
 
 P1 Vanilla 100 - P2 Vanilla 20
 Final win counts: {'draw': 0, 1: 82, 2: 18}
@@ -23,3 +22,12 @@ Final win counts: {'draw': 0, 1: 13, 2: 87}
 P1 Vanilla 100 - P2 Vanilla 2000
 Final win counts: {'draw': 5, 1: 67,  2: 28}
 3686.8951900  seconds
+
+
+- Analysis -
+
+It seems that at first, the more nodes per tree the bot has, the higher their win rate is. However, when we set the tree limits to 1000 nodes, the bot starts losing more compared to the result at 500 nodes. When we set it to 2000 nodes, the bot is losing most of the game. 
+
+I think it's because there's usually an optimal number of MCTS you can run to find the best options. If you run the MCTS too much, then the win rate of each option will start evening out, and MCTS won't be able to find the best option anymore.
+
+(We don't know where the submission form is, so we attached the image of the plot on our submission on Canvas)
