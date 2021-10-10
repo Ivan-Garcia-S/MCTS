@@ -26,7 +26,7 @@ def traverse_nodes(node, board, state, identity):
     leaf_node = node
     new_state = state
     
-    # else search through the childs
+    # search through the children
     while not leaf_node.untried_actions and leaf_node.child_nodes:
             
         # find the best child move for this node
