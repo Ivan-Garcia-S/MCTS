@@ -2,11 +2,15 @@ Experiment 2 – Heuristic Improvement
 Next, have your modified version of MCTS play against the vanilla version with both having equal tree sizes (suggested size: 1000). Submission analysis: Does the modified version win more games? Does this change if you increase or decrease the size of the trees? 
 
 
-Simulation Result
+- Simulation Result -
 
 P1 Modified 20 - P2 Vanilla 20
 Final win counts: {'draw': 2, 1: 62, 2: 36}
 92.64255092  seconds
+
+P1 Modified 50 - P2 Vanilla 50
+Final win counts: {'draw': 0, 1: 58, 2: 42}
+237.94056324800002  seconds
 
 P1 Modified 100 - P2 Vanilla 100
 Final win counts: {'draw': 0, 1: 51, 2: 49}
@@ -19,4 +23,14 @@ Final win counts: {'draw': 0, 1: 53, 2: 47}
 P1 Modified 1000 - P2 Vanilla 1000
 Final win counts: {'draw': 0, 1: 53, 2: 47}
 3804.447813685  seconds
+
+
+- Analysis - 
+
+In our test results the modified version does in fact win more games every time over the vanilla.  With more nodes it seems that 
+the winrate steadies out more even though the amount of wins the modified wins over the vanilla isn't very much.  The modified 
+seems to perform better when there's a smaller search tree.  I think this is because although playing on a corner space or center 
+space is generally a better move, doing it too often will make it harder to win games because there may be instances where playing 
+on one of the other spaces will make a three-in-a-row.
+
 
