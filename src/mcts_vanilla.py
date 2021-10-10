@@ -176,7 +176,7 @@ def think(board, state):
             best_win_rate = new_win_rate
             best_action = action
     
-    print("Choosed action {} with win rate of {}".format(best_action, best_win_rate))
+    #print("Choosed action {} with win rate of {}".format(best_action, best_win_rate))
 
         
     # Return an action, typically the most frequently used action (from the root) or the action with the best
