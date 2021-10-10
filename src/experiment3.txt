@@ -1,0 +1,5 @@
+Experiment 3 – Time as a Constraint
+Rather than fix the tree size, use time as the limiting factor. Set a time budget of 1 second. Alter your code to continue growing the tree as long as one full second has not passed. Test this constraint on both implementations. Does your modified version have a larger or smaller tree than the vanilla version? Why do you think this is the case? Does this comparison change at various time limits?
+
+
+Simulation Result
