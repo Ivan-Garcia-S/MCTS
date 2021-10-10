@@ -1,9 +1,9 @@
 from timeit import default_timer as time
 from mcts_node import MCTSNode
-from random import choice
+from random import choice, randint
 from math import sqrt, log
 
-num_nodes = 200
+num_nodes = 1000
 explore_faction = 2.
 
 def traverse_nodes(node, board, state, identity):
@@ -99,9 +99,23 @@ def rollout(board, state):
     """
     curr_state = state
     while not board.is_ended(curr_state):
-        random_action = choice(board.legal_actions(curr_state))
-        curr_state = board.next_state(curr_state, random_action)
-
+        rand = randint(1,10)
+        # Looks for available corner and center moves 40% of the time
+        if rand > 6:
+            corner_found = False 
+            for action in board.legal_actions(curr_state):
+                # Looks for available corner space or center space
+                if ((action[2] == 0 and action[3] == 0) or (action[2] == 0 and action[3] == 2) or \
+                                         (action[2] == 2 and action[3] == 0) or (action[2] == 2 and action[3] == 2) or\
+                                          action[2] == 1 and action[3] == 1) and not corner_found:
+                    final_action = action
+                    corner_found = True
+            if not corner_found:
+                final_action = choice(board.legal_actions(curr_state))
+        else:      
+            final_action = choice(board.legal_actions(curr_state))
+        curr_state = board.next_state(curr_state, final_action)
+    
     return curr_state
 
 
@@ -163,7 +177,11 @@ def think(board, state):
 
         time_elapsed = time() - start
 
-    print("Vanilla Tree Size: {}".format(num_nodes))
+    print("Modified Tree Size: {}".format(num_nodes))
+
+    # check for the best action
+    #print("All avaliable actions:")
+    #print(root_node.child_nodes.keys())
 
     # helper for finding win rate
     def node_winrate(node):
